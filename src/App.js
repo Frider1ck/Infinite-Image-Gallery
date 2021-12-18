@@ -1,23 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
-
+import React from 'react';
+const accesKey = 'BQRNxMuLlUE9XqIgSxYeqv90mRrqANvFsNFVWU7ymTk'
 function App() {
+  const [images, setImages] = React.useState([]);
+  React.useEffect(()=>{
+    fetch(`https://api.unsplash.com/photos?client_id=${accesKey}`)
+    .then(res => res.json())
+    .then(data => {
+      setImages(data)
+    })
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Unplash Image Gallery!</h1>
+
+      <form>
+        <input type='text' 
+        placeholder='Search Unsplash...'/>
+        <button>Search</button>
+      </form>
+
+      <div className='image-grid'>
+        {images.map((image, index) => {
+          return (
+            <div className='image' key={index}>
+            <img src={image.urls.regular}
+             alt={image.alt_description}/>
+          </div>
+          )
+        })}
+      </div>
     </div>
   );
 }
